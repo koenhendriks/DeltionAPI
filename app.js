@@ -1,6 +1,26 @@
 var express = require('express');
+var path = require('path');
 var app = express();
 var DeltionAPI = require('./DeltionAPI');
+
+/**
+ * Main App values
+ */
+app.title = 'Deltion Rooster API';
+app.version = '1.0.0';
+
+/**
+ * Set view engine
+ */
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+/**
+ * Set frond-end middle ware
+ */
+app.use('/css', express.static(__dirname+'/css'));
+app.use('/js', express.static(__dirname+'/js'));
+app.use('/fonts', express.static(__dirname+'/fonts'));
 
 /**
  * department route
@@ -8,7 +28,9 @@ var DeltionAPI = require('./DeltionAPI');
 app.get('/departments', function (req, res) {
     DeltionAPI.getDepartments(function(departments){
         console.log(departments);
-        res.send('success, see console');
+        res.render('departments', {
+            departments: departments,
+        });
     });
 });
 
@@ -16,14 +38,17 @@ app.get('/departments', function (req, res) {
  * Index route
  */
 app.get('/', function (req, res) {
-    res.send('<h2>Deltion Rooster API</h2><p>Version 1.0.0 using NodeJS with Express</p>by <b><a href="http://koenhendriks.com">Koen Hendriks</a><b/>');
+    res.render('index', {
+        title: app.title,
+        version: app.version
+    });
 });
 
 
 var server = app.listen(1337, function () {
 
-    var host = server.address().address
-    var port = server.address().port
+    var host = server.address().address;
+    var port = server.address().port;
 
     console.log('Example app listening at http://%s:%s', host, port)
 
