@@ -3,6 +3,7 @@ var path = require('path');
 var app = express();
 var DeltionAPI = require('./DeltionAPI');
 
+
 /**
  * Main App values
  */
@@ -27,10 +28,8 @@ app.use('/fonts', express.static(__dirname+'/fonts'));
  */
 app.get('/departments', function (req, res) {
     DeltionAPI.getDepartments(function(departments){
-        console.log(departments);
-        res.render('departments', {
-            departments: departments,
-        });
+        res.type('application/json');
+        res.jsonp(departments)
     });
 });
 
@@ -50,6 +49,6 @@ var server = app.listen(1337, function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s', host, port)
+    console.log(app.title+'('+app.version+') listening at http://%s:%s', host, port)
 
 });

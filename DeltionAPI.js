@@ -42,23 +42,30 @@ module.exports = {
     getDepartments : function(callback){
         var html = this.connect(function(html){
 
+            var response = [];
+
             // first argument can be html string, filename, or url
             env(html, function (errors, window) {
                 var $ = require('jquery')(window);
 
-                var departments = [];
 
-                //@ TODO get 'rosterid' from this.settings
+                //@ TODO get 'rosterid' from this.settings.departsmentName
                 $('#rosterid option').each(function()
                 {
-                    var department = $(this).text();
+                    var departmentName = $(this).text();
                     var departmentId = $(this).val();
 
-                    if(typeof department !== "undefined" && typeof departmentId !== "undefined" && department != ""){
-                        departments[department] = departmentId;
+                    if(departmentName !== undefined &&  departmentId !== undefined && departmentId != "" && departmentName != ""){
+
+                        var department = {
+                            name    : departmentName,
+                            id      : departmentId
+                        };
+
+                        response.push(department)
                     }
                 });
-                callback(departments);
+                callback(response);
             });
         });
 
