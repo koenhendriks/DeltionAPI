@@ -6,9 +6,10 @@ var DeltionAPI = require('./DeltionAPI');
  * department route
  */
 app.get('/departments', function (req, res) {
-    var html = DeltionAPI.getDepartments();
-    console.log(html);
-    res.send('html: '+html);
+    DeltionAPI.getDepartments(function(departments){
+        console.log(departments);
+        res.send('success, see console');
+    });
 });
 
 /**

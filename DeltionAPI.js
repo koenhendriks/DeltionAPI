@@ -1,15 +1,16 @@
 https = require('https');
+var env = require('jsdom').env;
 
 module.exports = {
 
     settings : {
-        'departmentsName' : 'rosterid',
-        'teachersName'    : 'teacherid',
-        'classRoomsName'  : 'lessonplaceid',
-        'studentsName'    : 'studentgroupid',
-        'showTime'        : 'showrostertabletimes',
-        'startDate'       : 'dtpviewperiodstartdatetime',
-        'endDate'         : 'dtpviewperiodenddatetime'
+        departmentsName : 'rosterid',
+        teachersName    : 'teacherid',
+        classRoomsName  : 'lessonplaceid',
+        studentsName    : 'studentgroupid',
+        showTime        : 'showrostertabletimes',
+        startDate       : 'dtpviewperiodstartdatetime',
+        endDate         : 'dtpviewperiodenddatetime'
     },
 
     httpsOptions : {
@@ -38,30 +39,30 @@ module.exports = {
         });
     },
 
-    getDepartments : function(){
+    getDepartments : function(callback){
         var html = this.connect(function(html){
-            return html;
+
+            // first argument can be html string, filename, or url
+            env(html, function (errors, window) {
+                var $ = require('jquery')(window);
+
+                var departments = [];
+
+                //@ TODO get 'rosterid' from this.settings
+                $('#rosterid option').each(function()
+                {
+                    var department = $(this).text();
+                    var departmentId = $(this).val();
+
+                    if(typeof department !== "undefined" && typeof departmentId !== "undefined" && department != ""){
+                        departments[department] = departmentId;
+                    }
+                });
+                callback(departments);
+            });
         });
 
 
-        //var env = require('jsdom').env;
-        //
-        //// first argument can be html string, filename, or url
-        //env(html, function (errors, window) {
-        //    var $ = require('jquery')(window);
-        //
-        //    $('#'+departmentsName+' option').each(function()
-        //    {
-        //        var department = $(this).text();
-        //        var departmentId = $(this).val();
-        //
-        //        if(typeof department !== "undefined" && typeof departmentId !== "undefined" && department != ""){
-        //            departments[department] = departmentId;
-        //        }
-        //
-        //    });
-        //
-        //    return departments;
-        //});
+
     }
 };
