@@ -1,5 +1,6 @@
 https = require('https');
 var env = require('jsdom').env;
+var fs = require('fs');
 
 module.exports = {
 
@@ -40,6 +41,7 @@ module.exports = {
     },
 
     getDepartments : function(callback){
+        DeltionAPI = this;
         var html = this.connect(function(html){
 
             var response = [];
@@ -48,9 +50,7 @@ module.exports = {
             env(html, function (errors, window) {
                 var $ = require('jquery')(window);
 
-
-                //@ TODO get 'rosterid' from this.settings.departsmentName
-                $('#rosterid option').each(function()
+                $('#'+DeltionAPI.settings.departmentsName+' option').each(function()
                 {
                     var departmentName = $(this).text();
                     var departmentId = $(this).val();
@@ -65,11 +65,20 @@ module.exports = {
                         response.push(department)
                     }
                 });
-                callback(response);
+                DeltionAPI.writeToFile('departments', response, function(){
+                    callback(response);
+                });
             });
         });
+    },
 
-
-
+    writeToFile : function(filename, json, callback){
+        fs.writeFile('cache/'+filename+'.json', json, function(err) {
+            if(err) {
+                callback(err);
+            } else {
+                callback('success');
+            }
+        });
     }
 };
