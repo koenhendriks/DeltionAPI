@@ -6,6 +6,7 @@ module.exports = {
 
     settings : {
         departmentsName : 'rosterid',
+        departmentsCache: 24 * (1000 * 60 * 60), // 24 hour cache
         teachersName    : 'teacherid',
         classRoomsName  : 'lessonplaceid',
         studentsName    : 'studentgroupid',
@@ -42,7 +43,50 @@ module.exports = {
 
     getDepartments : function(callback){
         DeltionAPI = this;
-        var html = this.connect(function(html){
+        var d = new Date();
+
+        fs.readdir('cache/departments', function(err, files) {
+            if(files.length > 0) {
+                var latest = files[files.length - 1];
+                var split = latest.split('-');
+                var difference = (d.getTime() - split[0]);
+                if (difference < DeltionAPI.settings.departmentsCache) {
+                    console.log('cache is not old, getting cache');
+                    DeltionAPI.getDepartmentsCache(latest, function(response){
+                        callback(response);
+                    });
+                }else{
+                    console.log('cache is old, getting live');
+                    DeltionAPI.getDepartmentsLive(function(response){
+                        callback(response);
+                    });
+                }
+            }else{
+                console.log('no cache, getting live');
+                DeltionAPI.getDepartmentsLive(function(response){
+                    callback(response);
+                });
+            }
+        });
+    },
+
+    getDepartmentsCache : function(file, callback){
+        DeltionAPI = this;
+        fs.readFile('cache/departments/'+file, 'utf8', function(err, content){
+            if(err){
+                console.log(err);
+                console.log('falling back on live');
+                DeltionAPI.getDepartmentsLive(function(response){
+                    callback(response);
+                });
+            }else{
+                callback(JSON.parse(content));
+            }
+        });
+    },
+
+    getDepartmentsLive : function(callback){
+        var html = DeltionAPI.connect(function(html){
 
             var response = [];
 
@@ -65,6 +109,7 @@ module.exports = {
                         response.push(department)
                     }
                 });
+
                 DeltionAPI.writeToFile('departments', response, function(){
                     callback(response);
                 });
@@ -73,7 +118,8 @@ module.exports = {
     },
 
     writeToFile : function(filename, json, callback){
-        fs.writeFile('cache/'+filename+'.json', json, function(err) {
+        var d = new Date();
+        fs.writeFile('cache/'+filename+'/'+ d.getTime() +'-'+ filename+'.json', JSON.stringify(json), function(err) {
             if(err) {
                 callback(err);
             } else {
