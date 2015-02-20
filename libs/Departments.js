@@ -3,10 +3,15 @@ var env = require('jsdom').env;
 var fs = require('fs');
 
 module.exports = {
+
+    options : {
+        name : 'rosterid',
+        cache: 24 * (1000 * 60 * 60), // 24 hour cache
+    },
+
     get : function(callback){
         var Departments = this;
-
-        DeltionAPI.getFromCache('departments/', 10000, function(result, file){
+        DeltionAPI.getFromCache('departments/', Departments.options.cache, function(result, file){
             switch (result){
                 case 'cache':
                     Departments.getCache(file, function(response){
@@ -38,6 +43,7 @@ module.exports = {
     },
 
     getLive : function(callback){
+        var Departments = this;
         var html = DeltionAPI.connect(function(html){
 
             var response = [];
@@ -46,7 +52,7 @@ module.exports = {
             env(html, function (errors, window) {
                 var $ = require('jquery')(window);
 
-                $('#'+DeltionAPI.settings.departmentsName+' option').each(function()
+                $('#'+Departments.options.name+' option').each(function()
                 {
                     var departmentName = $(this).text();
                     var departmentId = $(this).val();

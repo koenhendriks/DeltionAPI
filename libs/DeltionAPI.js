@@ -4,8 +4,6 @@ var fs = require('fs');
 module.exports = {
 
     settings : {
-        departmentsName : 'rosterid',
-        departmentsCache: 24 * (1000 * 60 * 60), // 24 hour cache
         teachersName    : 'teacherid',
         classRoomsName  : 'lessonplaceid',
         studentsName    : 'studentgroupid',
