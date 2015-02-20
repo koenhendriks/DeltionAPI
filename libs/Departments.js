@@ -1,31 +1,23 @@
 var DeltionAPI = require('./DeltionAPI');
+var env = require('jsdom').env;
 var fs = require('fs');
 
 module.exports = {
     get : function(callback){
-        var d = new Date();
         var Departments = this;
-        fs.readdir('cache/departments', function(err, files) {
-            if(files.length > 0) {
-                var latest = files[files.length - 1];
-                var split = latest.split('-');
-                var difference = (d.getTime() - split[0]);
-                if (difference < DeltionAPI.settings.departmentsCache) {
-                    console.log('cache is not old, getting cache');
-                    Departments.getCache(latest, function(response){
+
+        DeltionAPI.getFromCache('departments/', 10000, function(result, file){
+            switch (result){
+                case 'cache':
+                    Departments.getCache(file, function(response){
                         callback(response);
                     });
-                }else{
-                    console.log('cache is old, getting live');
+                    break;
+                case 'live':
                     Departments.getLive(function(response){
                         callback(response);
                     });
-                }
-            }else{
-                console.log('no cache, getting live');
-                Departments.getLive(function(response){
-                    callback(response);
-                });
+                    break;
             }
         });
     },
@@ -70,7 +62,7 @@ module.exports = {
                     }
                 });
 
-                DeltionAPI.writeToFile('departments', response, function(){
+                DeltionAPI.writeToCache('departments', response, function(){
                     callback(response);
                 });
             });

@@ -30,7 +30,7 @@ app.use('/cache', express.static(__dirname+'/cache'));
 app.get('/departments', function (req, res) {
     Departments.get(function(departments){
         res.type('application/json');
-        res.jsonp(departments)
+        res.jsonp(departments);
     });
 });
 
