@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var app = express();
-var DeltionAPI = require('./DeltionAPI');
+var Departments = require('./libs/Departments');
 
 
 /**
@@ -28,7 +28,7 @@ app.use('/cache', express.static(__dirname+'/cache'));
  * department route
  */
 app.get('/departments', function (req, res) {
-    DeltionAPI.getDepartments(function(departments){
+    Departments.get(function(departments){
         res.type('application/json');
         res.jsonp(departments)
     });
