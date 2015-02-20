@@ -20,7 +20,7 @@ module.exports = {
         studentsName    : 'studentgroupid',
         showTime        : 'showrostertabletimes',
         startDate       : 'dtpviewperiodstartdatetime',
-        endDate         : 'dtpviewperiodenddatetime'
+        endDate         : 'dtpviewperiodenddatetime',
     },
 
     /**
@@ -29,7 +29,7 @@ module.exports = {
     httpsOptions : {
         host: 'roosters.deltion.nl',
         port: 443,
-        path: '/roster/view/rosterid/52/'
+        path: '/roster/view/showrostertabeltime/on/rosterid/52/'
     },
 
     /**
@@ -51,7 +51,7 @@ module.exports = {
             });
 
             res.on('end', function () {
-                htmlResponse = body.toString();
+                var htmlResponse = body.toString();
                 callback(htmlResponse);
             });
         });
