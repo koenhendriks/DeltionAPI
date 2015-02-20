@@ -1,14 +1,30 @@
+/**
+ * Includes for this object
+ */
 var DeltionAPI = require('./DeltionAPI');
 var env = require('jsdom').env;
 var fs = require('fs');
 
+/**
+ * Departments gets departments in which time schedules are grouped
+ *
+ * @type {{options: {name: string, cache: number}, get: Function, getCache: Function, getLive: Function}}
+ */
 module.exports = {
 
+    /**
+     * Options for Departments
+     */
     options : {
         name : 'rosterid',
-        cache: 24 * (1000 * 60 * 60), // 24 hour cache
+        cache: 24 * (1000 * 60 * 60) // 24 hour cache
     },
 
+    /**
+     * Get the departments in a json object
+     *
+     * @param callback returns json with the departments
+     */
     get : function(callback){
         var Departments = this;
         DeltionAPI.getFromCache('departments/', Departments.options.cache, function(result, file){
@@ -27,6 +43,12 @@ module.exports = {
         });
     },
 
+    /**
+     * Get the latest departments from a json cache file
+     *
+     * @param file
+     * @param callback
+     */
     getCache : function(file, callback){
         var Departments = this;
         fs.readFile('cache/departments/'+file, 'utf8', function(err, content){
@@ -42,13 +64,21 @@ module.exports = {
         });
     },
 
+    /**
+     * Get the departments live by parsing the deltion website
+     *
+     * @param callback
+     */
     getLive : function(callback){
         var Departments = this;
         var html = DeltionAPI.connect(function(html){
 
             var response = [];
 
-            // first argument can be html string, filename, or url
+            /**
+             * Create a web-browser like environment in which
+             * we can use jquery selector to get the departments
+             */
             env(html, function (errors, window) {
                 var $ = require('jquery')(window);
 
@@ -68,6 +98,9 @@ module.exports = {
                     }
                 });
 
+                /**
+                 * First write response to a json cache then run the callback
+                 */
                 DeltionAPI.writeToCache('departments', response, function(){
                     callback(response);
                 });
