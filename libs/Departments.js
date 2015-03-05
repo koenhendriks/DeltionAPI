@@ -2,7 +2,7 @@
  * Includes for this object
  */
 var DeltionAPI = require('./DeltionAPI');
-var env = require('jsdom').env;
+var cheerio = require('cheerio');
 var fs = require('fs');
 
 /**
@@ -74,36 +74,29 @@ module.exports = {
         var html = DeltionAPI.connect(function(html){
 
             var response = [];
+            var $ = cheerio.load(html);
+
+            $('#'+Departments.options.name+' option').each(function()
+            {
+                var departmentName = $(this).text();
+                var departmentId = $(this).val();
+
+                if(departmentName !== undefined &&  departmentId !== undefined && departmentId != "" && departmentName != ""){
+
+                    var department = {
+                        name    : departmentName,
+                        id      : departmentId
+                    };
+
+                    response.push(department)
+                }
+            });
 
             /**
-             * Create a web-browser like environment in which
-             * we can use jquery selector to get the departments
+             * First write response to a json cache then run the callback
              */
-            env(html, function (errors, window) {
-                var $ = require('jquery')(window);
-
-                $('#'+Departments.options.name+' option').each(function()
-                {
-                    var departmentName = $(this).text();
-                    var departmentId = $(this).val();
-
-                    if(departmentName !== undefined &&  departmentId !== undefined && departmentId != "" && departmentName != ""){
-
-                        var department = {
-                            name    : departmentName,
-                            id      : departmentId
-                        };
-
-                        response.push(department)
-                    }
-                });
-
-                /**
-                 * First write response to a json cache then run the callback
-                 */
-                DeltionAPI.writeToCache('departments', response, function(){
-                    callback(response);
-                });
+            DeltionAPI.writeToCache('departments', response, function(){
+                callback(response);
             });
         });
     }
