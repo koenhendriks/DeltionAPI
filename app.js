@@ -9,6 +9,7 @@ var Departments = require('./libs/Departments');
  */
 app.title = 'Deltion Rooster API';
 app.version = '1.0.0';
+app.webUrl = 'http://localhost:1337/';
 
 /**
  * Set view engine
@@ -40,7 +41,8 @@ app.get('/departments', function (req, res) {
 app.get('/', function (req, res) {
     res.render('index', {
         title: app.title,
-        version: app.version
+        version: app.version,
+        webUrl: app.webUrl
     });
 });
 

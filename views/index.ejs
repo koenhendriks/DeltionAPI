@@ -13,7 +13,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -55,11 +55,37 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header"><%= title %></h1>
+                <h1 class="page-header"><%= title %> <a href="http://github.com/koenhendriks/DeltionAPI/"><span class="fa fa-github"></span></a>  </h1>
                 <p class="lead">Version <%= version %> by <a href="http://koenhendriks.com">Koen Hendriks</a> </p>
             </div>
         </div>
         <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Departments</h2>
+                <hr>
+                <p><b>Request url:</b>
+                        <a href="<%= webUrl %>departments/"><%= webUrl %>departments/</a>
+                </p>
+                <p><b>Parameters:</b>
+                        None
+                </p>
+                <p>This will return a json object with all the names and id's of all the departments.</p>
+                <p><b>Example:</b>
+<pre class="col-lg-8">[
+    {
+        "name": "ICT Lyceum",
+        "id": "52"
+    },{
+        "name": "Podiumtechniek & Artiest",
+        "id": "51"
+    },{
+        ...
+    }
+]</pre></p>
+
+            </div>
+        </div>
 
     </div>
     <!-- /.container -->
