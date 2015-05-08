@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var Departments = require('./libs/Departments');
+var Classes = require('./libs/Classes');
 
 
 /**
@@ -26,12 +27,22 @@ app.use('/fonts', express.static(__dirname+'/fonts'));
 app.use('/cache', express.static(__dirname+'/cache'));
 
 /**
- * department route
+ * Departments route
  */
 app.get('/departments', function (req, res) {
     Departments.get(function(departments){
         res.type('application/json');
         res.jsonp(departments);
+    });
+});
+
+/**
+ * Classes route
+ */
+app.get('/classes', function (req, res) {
+    Classes.get(function(classes){
+        res.type('application/json');
+        res.jsonp(classes);
     });
 });
 

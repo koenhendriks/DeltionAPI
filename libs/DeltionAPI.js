@@ -17,7 +17,6 @@ module.exports = {
     settings : {
         teachersName    : 'teacherid',
         classRoomsName  : 'lessonplaceid',
-        studentsName    : 'studentgroupid',
         showTime        : 'showrostertabletimes',
         startDate       : 'dtpviewperiodstartdatetime',
         endDate         : 'dtpviewperiodenddatetime',
