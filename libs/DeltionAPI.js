@@ -29,6 +29,7 @@ module.exports = {
         host: 'roosters.deltion.nl',
         port: 443,
         path: '/roster/view/showrostertabeltime/on/rosterid/52/'
+        //path: '/roster/view/showrostertabeltime/on/rosterid/52/dtpshowviewperiodstartdatetime/maa+06+apr+2015/dtpviewperiodstartdatetime/2015-04-06/dtpshowviewperiodenddatetime/vry+10+apr+2015/dtpviewperiodenddatetime/2015-4-10/'dtpshowviewperiodstartdatetime/maa+06+apr+2015/dtpviewperiodstartdatetime/2015-04-06/dtpshowviewperiodenddatetime/vry+10+apr+2015/dtpviewperiodenddatetime/2015-4-10/'
     },
 
     /**
