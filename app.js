@@ -39,8 +39,9 @@ app.get('/departments', function (req, res) {
 /**
  * Classes route
  */
-app.get('/classes', function (req, res) {
-    Classes.get(function(classes){
+app.get('/classes/:departmentId?', function (req, res) {
+    var departmentId = req.params.departmentId;
+    Classes.get(departmentId,function(classes){
         res.type('application/json');
         res.jsonp(classes);
     });
