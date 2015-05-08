@@ -15,16 +15,20 @@ module.exports = {
      */
     options : {
         name : 'studentgroupid',
-        cache: 24 * (1000 * 60 * 60) // 24 hour cache
+        cache: 1 // 24 hour cache
     },
 
     /**
      * Get the classes in a json object
      *
+     * @param departmentId integer of department to get classes from
      * @param callback returns json with the classes
      */
-    get : function(callback){
-        var Classes = this;
+    get : function(departmentId, callback){
+
+        if(departmentId === undefined)
+            //ToDo get all classes per department or get classes from specific department
+
         DeltionAPI.getFromCache('classes/', Classes.options.cache, function(result, file){
             switch (result){
                 case 'cache':
@@ -48,9 +52,6 @@ module.exports = {
      */
     getLive : function(callback){
         var Classes = this;
-
-        DeltionAPI.httpsOptions.path += 'dtpshowviewperiodstartdatetime/maa+06+apr+2015/dtpviewperiodstartdatetime/2015-04-06/dtpshowviewperiodenddatetime/vry+10+apr+2015/dtpviewperiodenddatetime/2015-4-10/';
-
         var html = DeltionAPI.connect(function(html){
 
             var response = [];
@@ -79,7 +80,28 @@ module.exports = {
                 callback(response);
             });
         });
-    }
+    },
+
+    /**
+     * Get the latest departments from a json cache file
+     *
+     * @param file
+     * @param callback
+     */
+    getCache : function(file, callback){
+        var Classes = this;
+        fs.readFile('cache/classes/'+file, 'utf8', function(err, content){
+            if(err){
+                console.log(err);
+                console.log('falling back on live');
+                Classes.getLive(function(response){
+                    callback(response);
+                });
+            }else{
+                callback(JSON.parse(content));
+            }
+        });
+    },
 
 
 
