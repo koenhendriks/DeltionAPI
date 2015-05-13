@@ -25,7 +25,8 @@ module.exports = {
      * @param callback returns json with the classes
      */
     get : function(departmentId, callback){
-
+        console.log('Getting Classes.');
+        var Classes = this;
         if(departmentId === undefined)
             //ToDo get all classes per department or get classes from specific department
 
@@ -59,6 +60,7 @@ module.exports = {
 
             $('#'+Classes.options.name+' option').each(function()
             {
+
                 var className = $(this).text();
                 var classId = $(this).val();
 

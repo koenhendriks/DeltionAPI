@@ -3,11 +3,12 @@
 */
 var https = require('https');
 var fs = require('fs');
+var DeltionUrl = require('./DeltionUrl');
 
 /**
  * DeltionAPI main object for connecting to deltion time schedule website
  *
- * @type {{settings: {teachersName: string, classRoomsName: string, studentsName: string, showTime: string, startDate: string, endDate: string}, httpsOptions: {host: string, port: number, path: string}, connect: Function, getFromCache: Function, writeToCache: Function}}
+ * @type {{settings: {teachersName: string, classRoomsName: string, pathType: string, customDate: boolean, showTime: boolean, department: number, startDate: string, endDate: string, classId: number, classRoom: number, teacher: number, path: {default: string, showTime: string, department: string, startDate: string, endDate: string, classId: string, classRoom: string, teacher: string}}, httpsOptions: {host: string, port: number, path: path}, getPath: Function, connect: Function, getFromCache: Function, writeToCache: Function}}
  */
 module.exports = {
 
@@ -15,11 +16,15 @@ module.exports = {
      * Main API Settings
      */
     settings : {
-        teachersName    : 'teacherid',
-        classRoomsName  : 'lessonplaceid',
-        showTime        : 'showrostertabletimes',
-        startDate       : 'dtpviewperiodstartdatetime',
-        endDate         : 'dtpviewperiodenddatetime',
+        pathType        : 'class',      // 'class', 'teacher' or 'classroom'
+        customDate      :  true,        // use own dates in request?
+        showTime        :  true,        // also ask for times in url ?
+        department      :  52,          // department id to use to fetch classes, teachers, or classrooms
+        startDate       : '2015-05-11', // Start date in format YYYY-MM-DD
+        endDate         : '2015-05-15', // End date in format YYYY-MM-DD
+        classId         : 1093,         // Id of the class
+        classRoom       : 4034,         // Id of the classroom
+        teacher         : 6706          // Id of the teacher
     },
 
     /**
@@ -28,8 +33,8 @@ module.exports = {
     httpsOptions : {
         host: 'roosters.deltion.nl',
         port: 443,
-        path: '/roster/view/showrostertabeltime/on/rosterid/52/'
-        //path: '/roster/view/showrostertabeltime/on/rosterid/52/dtpshowviewperiodstartdatetime/maa+06+apr+2015/dtpviewperiodstartdatetime/2015-04-06/dtpshowviewperiodenddatetime/vry+10+apr+2015/dtpviewperiodenddatetime/2015-4-10/'dtpshowviewperiodstartdatetime/maa+06+apr+2015/dtpviewperiodstartdatetime/2015-04-06/dtpshowviewperiodenddatetime/vry+10+apr+2015/dtpviewperiodenddatetime/2015-4-10/'
+        path: DeltionUrl.getPath()
+        //https://roosters.deltion.nl/roster/view/rosterid/52/dtpviewperiodstartdatetime/2015-05-11/dtpviewperiodenddatetime/2015-05-15/studentgroupid/1093
     },
 
     /**
@@ -101,5 +106,9 @@ module.exports = {
                 callback('success');
             }
         });
+    },
+
+    test : function(){
+        console.log('test');
     }
 };

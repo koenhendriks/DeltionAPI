@@ -26,6 +26,7 @@ module.exports = {
      * @param callback returns json with the departments
      */
     get : function(callback){
+        console.log('Getting Departments.');
         var Departments = this;
         DeltionAPI.getFromCache('departments/', Departments.options.cache, function(result, file){
             switch (result){
