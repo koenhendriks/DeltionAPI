@@ -4,6 +4,7 @@
 var https = require('https');
 var fs = require('fs');
 var DeltionUrl = require('./DeltionUrl');
+var Settings = require('./Settings');
 
 /**
  * DeltionAPI main object for connecting to deltion time schedule website
@@ -12,29 +13,13 @@ var DeltionUrl = require('./DeltionUrl');
  */
 module.exports = {
 
-    /**
-     * Main API Settings
-     */
-    settings : {
-        pathType        : 'class',      // 'class', 'teacher' or 'classroom'
-        customDate      :  true,        // use own dates in request?
-        showTime        :  true,        // also ask for times in url ?
-        department      :  52,          // department id to use to fetch classes, teachers, or classrooms
-        startDate       : '2015-05-11', // Start date in format YYYY-MM-DD
-        endDate         : '2015-05-15', // End date in format YYYY-MM-DD
-        classId         : 1093,         // Id of the class
-        classRoom       : 4034,         // Id of the classroom
-        teacher         : 6706          // Id of the teacher
-    },
 
     /**
-     * Options for connecting over https
+     * Get the settings for the https connection
      */
-    httpsOptions : {
-        host: 'roosters.deltion.nl',
-        port: 443,
-        path: DeltionUrl.getPath()
-        //https://roosters.deltion.nl/roster/view/rosterid/52/dtpviewperiodstartdatetime/2015-05-11/dtpviewperiodenddatetime/2015-05-15/studentgroupid/1093
+    getHttpsSettings : function(){
+        Settings.httpsSettings.path = DeltionUrl.getPath();
+        return Settings.httpsSettings;
     },
 
     /**
@@ -43,7 +28,7 @@ module.exports = {
      * @param callback with html from the website
      */
     connect : function(callback) {
-        https.get(this.httpsOptions, function (res) {
+        https.get(this.getHttpsSettings(), function (res) {
             console.log("Got response deltion: " + res.statusCode);
 
             var body;
