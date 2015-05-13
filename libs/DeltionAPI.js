@@ -3,33 +3,23 @@
 */
 var https = require('https');
 var fs = require('fs');
+var DeltionUrl = require('./DeltionUrl');
+var Settings = require('./Settings');
 
 /**
  * DeltionAPI main object for connecting to deltion time schedule website
  *
- * @type {{settings: {teachersName: string, classRoomsName: string, studentsName: string, showTime: string, startDate: string, endDate: string}, httpsOptions: {host: string, port: number, path: string}, connect: Function, getFromCache: Function, writeToCache: Function}}
+ * @type {{settings: {teachersName: string, classRoomsName: string, pathType: string, customDate: boolean, showTime: boolean, department: number, startDate: string, endDate: string, classId: number, classRoom: number, teacher: number, path: {default: string, showTime: string, department: string, startDate: string, endDate: string, classId: string, classRoom: string, teacher: string}}, httpsOptions: {host: string, port: number, path: path}, getPath: Function, connect: Function, getFromCache: Function, writeToCache: Function}}
  */
 module.exports = {
 
-    /**
-     * Main API Settings
-     */
-    settings : {
-        teachersName    : 'teacherid',
-        classRoomsName  : 'lessonplaceid',
-        showTime        : 'showrostertabletimes',
-        startDate       : 'dtpviewperiodstartdatetime',
-        endDate         : 'dtpviewperiodenddatetime',
-    },
 
     /**
-     * Options for connecting over https
+     * Get the settings for the https connection
      */
-    httpsOptions : {
-        host: 'roosters.deltion.nl',
-        port: 443,
-        path: '/roster/view/showrostertabeltime/on/rosterid/52/'
-        //path: '/roster/view/showrostertabeltime/on/rosterid/52/dtpshowviewperiodstartdatetime/maa+06+apr+2015/dtpviewperiodstartdatetime/2015-04-06/dtpshowviewperiodenddatetime/vry+10+apr+2015/dtpviewperiodenddatetime/2015-4-10/'dtpshowviewperiodstartdatetime/maa+06+apr+2015/dtpviewperiodstartdatetime/2015-04-06/dtpshowviewperiodenddatetime/vry+10+apr+2015/dtpviewperiodenddatetime/2015-4-10/'
+    getHttpsSettings : function(){
+        Settings.httpsSettings.path = DeltionUrl.getPath();
+        return Settings.httpsSettings;
     },
 
     /**
@@ -38,7 +28,7 @@ module.exports = {
      * @param callback with html from the website
      */
     connect : function(callback) {
-        https.get(this.httpsOptions, function (res) {
+        https.get(this.getHttpsSettings(), function (res) {
             console.log("Got response deltion: " + res.statusCode);
 
             var body;
@@ -101,5 +91,9 @@ module.exports = {
                 callback('success');
             }
         });
+    },
+
+    test : function(){
+        console.log('test');
     }
 };

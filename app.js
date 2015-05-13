@@ -4,7 +4,6 @@ var app = express();
 var Departments = require('./libs/Departments');
 var Classes = require('./libs/Classes');
 
-
 /**
  * Main App values
  */
