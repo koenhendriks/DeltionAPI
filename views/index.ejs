@@ -64,18 +64,21 @@
         </div>
         <!-- /.row -->
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <h2>Departments</h2>
                 <hr>
-                <p><b>Request url:</b>
-                        <a href="<%= webUrl %>departments/"><%= webUrl %>departments/</a>
-                </p>
-                <p><b>Parameters:</b>
-                        None
-                </p>
-                <p>This will return a json object with all the names and id's of all the departments.</p>
-                <p><b>Example:</b>
-<pre class="col-lg-8">[
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p>This will return a json object with all the names and id's of all the departments.</p>
+                        <p><b>Request url:</b><br/>
+                            <a href="<%= webUrl %>departments/"><%= webUrl %>departments/</a>
+                        </p>
+                        <p><b>Parameters:</b><br/>
+                            None
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+<pre>[
     {
         "name": "ICT Lyceum",
         "id": "52"
@@ -85,10 +88,62 @@
     },{
         ...
     }
-]</pre></p>
-
+]</pre>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Classes</h2>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p>This will return a json object with all the names and id's of the classes requested from a specific department.</p>
+                        <p><b>Request url:</b><br/>
+                            <a href="<%= webUrl %>classes/"><%= webUrl %>classes/</a>
+                        </p>
+                        <p><b>Parameters:</b><br/>
+                            <table class="table table-bordered table-responsive table-striped">
+                                <tr>
+                                    <td>Value</td>
+                                    <td>Type</td>
+                                    <td>Default</td>
+                                    <td>Description</td>
+                                </tr>
+                                <tr>
+                                    <td>Department Id</td>
+                                    <td>Integer</td>
+                                    <td>52</td>
+                                    <td>Id of the department from which the classes should be loaded.</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <a href="<%= webUrl %>classes/64"><%= webUrl %>classes/64</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+<pre>[
+    {
+        "name": "2BAT1",
+        "id": "911"
+    },
+    {
+        "name": "2BAT2",
+        "id": "905"
+    },
+    {
+        ...
+    }
+]</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
     <!-- /.container -->
