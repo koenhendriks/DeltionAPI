@@ -18,6 +18,8 @@ module.exports = {
      * Get the settings for the https connection
      */
     getHttpsSettings : function(){
+        Settings = require('./Settings');
+
         Settings.httpsSettings.path = DeltionUrl.getPath();
         return Settings.httpsSettings;
     },
@@ -56,23 +58,29 @@ module.exports = {
      */
     getFromCache : function(directory, cacheTime, callback){
         var d = new Date();
-        fs.readdir('cache/'+directory, function(err, files) {
-            if(files.length > 0) {
-                var latest = files[files.length - 1];
-                var split = latest.split('-');
-                var difference = (d.getTime() - split[0]);
-                if (difference < cacheTime) {
-                    console.log('cache is not old, getting cache');
-                    callback('cache', latest);
+        var dir = 'cache/'+directory;
+
+        if (!fs.existsSync(dir)){
+            callback('live');
+        }else{
+            fs.readdir(dir, function(err, files) {
+                if(files.length > 0) {
+                    var latest = files[files.length - 1];
+                    var split = latest.split('-');
+                    var difference = (d.getTime() - split[0]);
+                    if (difference < cacheTime) {
+                        console.log('cache is not old, getting cache');
+                        callback('cache', latest);
+                    }else{
+                        console.log('cache is old, getting live');
+                        callback('live');
+                    }
                 }else{
-                    console.log('cache is old, getting live');
+                    console.log('no cache, getting live');
                     callback('live');
                 }
-            }else{
-                console.log('no cache, getting live');
-                callback('live');
-            }
-        });
+            });
+        }
     },
 
     /**
@@ -84,6 +92,12 @@ module.exports = {
      */
     writeToCache : function(filename, json, callback){
         var d = new Date();
+
+        var dir = 'cache/'+filename;
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+
         fs.writeFile('cache/'+filename+'/'+ d.getTime() +'-'+ filename+'.json', JSON.stringify(json,null,4), function(err) {
             if(err) {
                 callback(err);

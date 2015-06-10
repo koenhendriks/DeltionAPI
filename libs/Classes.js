@@ -16,7 +16,7 @@ module.exports = {
      */
     options : {
         name : 'studentgroupid',
-        cache: 1 // 24 hour cache
+        cache: 24 * (1000 * 60 * 60) // 24 hour cache
     },
 
     /**
@@ -27,14 +27,20 @@ module.exports = {
      */
     get : function(departmentId, callback){
         console.log('Getting Classes.');
-        var Classes = this;
 
+        var Classes = this;
+        Settings = require('./Settings');
+
+        // Setting the path type to 'none' so we don't get redirected
+        Settings.main.pathType = 'none';
+
+        // Set department id if we got one
         if(departmentId !== undefined){
             console.log('setting main department '+parseInt(departmentId));
             Settings.main.department = parseInt(departmentId);
         }
 
-        DeltionAPI.getFromCache('classes/', Classes.options.cache, function(result, file){
+        DeltionAPI.getFromCache('dep-'+departmentId+'-classes/', Classes.options.cache, function(result, file){
             switch (result){
                 case 'cache':
                     Classes.getCache(file, function(response){
@@ -56,6 +62,7 @@ module.exports = {
      * @param callback
      */
     getLive : function(callback){
+        Settings = require('./Settings');
         var Classes = this;
         var html = DeltionAPI.connect(function(html){
 
@@ -82,7 +89,7 @@ module.exports = {
             /**
              * First write response to a json cache then run the callback
              */
-            DeltionAPI.writeToCache('classes', response, function(){
+            DeltionAPI.writeToCache('dep-'+Settings.main.department+'-classes', response, function(){
                 callback(response);
             });
         });
@@ -96,7 +103,12 @@ module.exports = {
      */
     getCache : function(file, callback){
         var Classes = this;
-        fs.readFile('cache/classes/'+file, 'utf8', function(err, content){
+
+        var split = file.split('-classes.json')[0];
+        split = split.split('-dep-')[1];
+        var department = split;
+
+        fs.readFile('cache/dep-'+department+'-classes/'+file, 'utf8', function(err, content){
             if(err){
                 console.log(err);
                 console.log('falling back on live');
@@ -107,8 +119,5 @@ module.exports = {
                 callback(JSON.parse(content));
             }
         });
-    },
-
-
-
+    }
 }

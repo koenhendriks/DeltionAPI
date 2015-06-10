@@ -12,12 +12,12 @@ module.exports = {
     path : {
         default: '/roster/view/',
         showTime: 'showrostertabeltime/on/',
-        department: 'rosterid/' + Settings.main.department + '/',
-        startDate: 'dtpviewperiodstartdatetime/' + Settings.main.startDate + '/',
-        endDate: 'dtpviewperiodenddatetime/' + Settings.main.endDate + '/',
-        classId: 'studentgroupid/' + Settings.main.classId + '/',
-        classRoom: 'lessonplaceid/' + Settings.main.classRoom + '/',
-        teacher: 'teacherid/' + Settings.main.teacher + '/'
+        department: 'rosterid/',
+        startDate: 'dtpviewperiodstartdatetime/',
+        endDate: 'dtpviewperiodenddatetime/',
+        classId: 'studentgroupid/',
+        classRoom: 'lessonplaceid/',
+        teacher: 'teacherid/'
     },
 
     /**
@@ -37,23 +37,24 @@ module.exports = {
         if(Settings.main.showTime)
             path += DeltionUrl.path.showTime;
 
-        console.log('getting path with: '+DeltionUrl.path.department);
-        path += DeltionUrl.path.department;
+        path += DeltionUrl.path.department + Settings.main.department + '/';
 
         if(Settings.main.customDate){
-            path += DeltionUrl.path.startDate;
-            path += DeltionUrl.path.endDate;
+            path += DeltionUrl.path.startDate + Settings.main.startDate + '/';
+            path += DeltionUrl.path.endDate + Settings.main.endDate + '/';
         }
 
         switch(type){
             case 'teacher':
-                path += DeltionUrl.path.teacher;
+                path += DeltionUrl.path.teacher + Settings.main.teacher + '/';
                 break;
             case 'class':
-                path +=DeltionUrl.path.classId;
+                path +=DeltionUrl.path.classId + Settings.main.classId + '/';
                 break;
             case 'classroom':
-                path += DeltionUrl.path.classRoom;
+                path += DeltionUrl.path.classRoom + Settings.main.classRoom + '/';
+                break;
+            case 'none':
                 break;
         }
 
