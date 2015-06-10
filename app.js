@@ -57,7 +57,11 @@ app.get('/', function (req, res) {
     });
 });
 
-
+/**
+ * Actual running server
+ *
+ * @type {http.Server}
+ */
 var server = app.listen(1337, function () {
 
     var host = server.address().address;

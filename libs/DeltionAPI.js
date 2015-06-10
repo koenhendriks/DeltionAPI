@@ -91,9 +91,5 @@ module.exports = {
                 callback('success');
             }
         });
-    },
-
-    test : function(){
-        console.log('test');
     }
 };

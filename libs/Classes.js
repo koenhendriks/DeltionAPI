@@ -4,6 +4,7 @@
 var DeltionAPI = require('./DeltionAPI');
 var cheerio = require('cheerio');
 var fs = require('fs');
+var Settings = require('./Settings');
 
 /**
  * Classes gets classes from specific Departments
@@ -19,7 +20,7 @@ module.exports = {
     },
 
     /**
-     * Get the classes in a json object
+     * Get the classes from a department in a json object
      *
      * @param departmentId integer of department to get classes from
      * @param callback returns json with the classes
@@ -27,8 +28,11 @@ module.exports = {
     get : function(departmentId, callback){
         console.log('Getting Classes.');
         var Classes = this;
-        if(departmentId === undefined)
-            //ToDo get all classes per department or get classes from specific department
+
+        if(departmentId !== undefined){
+            console.log('setting main department '+parseInt(departmentId));
+            Settings.main.department = parseInt(departmentId);
+        }
 
         DeltionAPI.getFromCache('classes/', Classes.options.cache, function(result, file){
             switch (result){

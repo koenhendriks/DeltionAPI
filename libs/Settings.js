@@ -5,15 +5,15 @@ module.exports = {
      * Main API Settings
      */
     main: {
-        pathType: 'class',      // 'class', 'teacher' or 'classroom'
-        customDate: true,        // use own dates in request?
-        showTime: true,        // also ask for times in url ?
-        department: 52,          // department id to use to fetch classes, teachers, or classrooms
-        startDate: '2015-05-11', // Start date in format YYYY-MM-DD
-        endDate: '2015-05-15', // End date in format YYYY-MM-DD
-        classId: 1093,         // Id of the class
-        classRoom: 4034,         // Id of the classroom
-        teacher: 6706          // Id of the teacher
+        pathType: 'class',          // 'class', 'teacher' or 'classroom'
+        customDate: true,           // use own dates in request?
+        showTime: true,             // also ask for times in url ?
+        department: 52,             // department id to use to fetch classes, teachers, or classrooms
+        startDate: '2015-05-11',    // Start date in format YYYY-MM-DD
+        endDate: '2015-05-15',      // End date in format YYYY-MM-DD
+        classId: 1093,              // Id of the class
+        classRoom: 4034,            // Id of the classroom
+        teacher: 6706               // Id of the teacher
     },
 
     /**

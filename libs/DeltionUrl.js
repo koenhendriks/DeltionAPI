@@ -28,6 +28,7 @@ module.exports = {
      */
     getPath : function(){
 
+        Settings = require('./Settings');
         var DeltionUrl = this;
 
         var type = Settings.main.pathType;
@@ -36,6 +37,7 @@ module.exports = {
         if(Settings.main.showTime)
             path += DeltionUrl.path.showTime;
 
+        console.log('getting path with: '+DeltionUrl.path.department);
         path += DeltionUrl.path.department;
 
         if(Settings.main.customDate){
